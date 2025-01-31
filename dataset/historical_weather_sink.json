@@ -2,7 +2,7 @@
 	"name": "historical_weather_sink",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureBlobStorage1",
+			"referenceName": "to_blob_sink",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
