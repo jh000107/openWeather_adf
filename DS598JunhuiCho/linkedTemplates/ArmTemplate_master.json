@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "DS598JunhuiCho"
 		},
-		"AzureBlobStorage1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
-		},
 		"to_blob_sink_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'to_blob_sink'"
@@ -49,9 +45,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"AzureBlobStorage1_connectionString": {
-						"value": "[parameters('AzureBlobStorage1_connectionString')]"
 					},
 					"to_blob_sink_connectionString": {
 						"value": "[parameters('to_blob_sink_connectionString')]"

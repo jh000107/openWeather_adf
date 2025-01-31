@@ -5,9 +5,6 @@
 		"factoryName": {
 			"value": "DS598JunhuiCho"
 		},
-		"AzureBlobStorage1_connectionString": {
-			"value": ""
-		},
 		"to_blob_sink_connectionString": {
 			"value": ""
 		},
