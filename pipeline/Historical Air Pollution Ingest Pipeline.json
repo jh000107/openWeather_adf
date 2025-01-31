@@ -1,0 +1,64 @@
+{
+	"name": "Historical Air Pollution Ingest Pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "airpollution copy data",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "historical_airpollution_source",
+						"type": "DatasetReference",
+						"parameters": {
+							"lat": "42.3554",
+							"lon": "-71.0605",
+							"start": "1706504400",
+							"end": "1738181987",
+							"appid": "063296aa01237892ad67c3aec3919db4"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "historical_airpollution_sink",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2025-01-30T03:27:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
