@@ -7,10 +7,12 @@
 		},
 		"parameters": {
 			"lat": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "42.3554"
 			},
 			"lon": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "-71.0605"
 			},
 			"start": {
 				"type": "string"
@@ -19,10 +21,12 @@
 				"type": "string"
 			},
 			"dataType": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "hour"
 			},
 			"appid": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "063296aa01237892ad67c3aec3919db4"
 			}
 		},
 		"annotations": [],
