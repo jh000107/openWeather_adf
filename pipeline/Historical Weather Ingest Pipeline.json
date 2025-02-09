@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "ForEach1",
+				"name": "For Each Week",
 				"type": "ForEach",
 				"dependsOn": [],
 				"userProperties": [],
