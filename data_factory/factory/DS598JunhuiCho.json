@@ -1,0 +1,9 @@
+{
+	"name": "DS598JunhuiCho",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "42b06fe2-4039-4387-966c-f4fd169ba546",
+		"tenantId": "d57d32cc-c121-488f-b07b-dfe705680c71"
+	}
+}

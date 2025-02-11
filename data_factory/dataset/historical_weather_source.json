@@ -1,0 +1,46 @@
+{
+	"name": "historical_weather_source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "historical_weather_http",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"lat": {
+				"type": "string",
+				"defaultValue": "42.3554"
+			},
+			"lon": {
+				"type": "string",
+				"defaultValue": "-71.0605"
+			},
+			"start": {
+				"type": "string"
+			},
+			"end": {
+				"type": "string"
+			},
+			"dataType": {
+				"type": "string",
+				"defaultValue": "hour"
+			},
+			"appid": {
+				"type": "string",
+				"defaultValue": "063296aa01237892ad67c3aec3919db4"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "data/2.5/history/city?lat=@{dataset().lat}&lon=@{dataset().lon}&type=@{dataset().dataType}&start=@{dataset().start}&end=@{dataset().end}&appid=@{dataset().appid}",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
