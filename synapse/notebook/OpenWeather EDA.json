@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e898bf40-27a7-4f68-bf84-9b5ad54060dc"
+				"spark.autotune.trackingId": "d2f812a8-5527-43be-8795-4029ba5f7e39"
 			}
 		},
 		"metadata": {
@@ -49,6 +49,36 @@
 			"sessionKeepAliveTimeout": 30
 		},
 		"cells": [
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# OpenWeather Data EDA"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Configuration\n",
+					"\n",
+					"- Synapse is connected to my Github, so it is necessary to secure my API key. Key Vault access is only given to my personal account.\n",
+					"    - Secured Key: Storage Account Key\n",
+					"- Connect to my storage account where the OpenWeather data is stored."
+				]
+			},
 			{
 				"cell_type": "code",
 				"metadata": {
@@ -104,6 +134,21 @@
 					"historical_weather_df = spark.read.json(f\"abfss://{container_name}@{storage_account_name}.dfs.core.windows.net/{historical_weather_folder_path}\")"
 				],
 				"execution_count": 6
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Data Observation\n",
+					"\n",
+					"Taking a look at the raw data."
+				]
 			},
 			{
 				"cell_type": "code",
@@ -175,29 +220,27 @@
 					}
 				},
 				"source": [
-					"air_pollution_df.printSchema()"
-				],
-				"execution_count": 10
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					"historical_weather_df.show()"
+					"# Count the number of rows to see if the data is loaded correctly\n",
+					"# Ideally, there should be one row for each timestamp\n",
+					"\n",
+					"historical_weather_df.count()"
 				],
 				"execution_count": 11
 			},
 			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Restructuring DataFrames"
+				]
+			},
+			{
 				"cell_type": "code",
 				"metadata": {
 					"jupyter": {
@@ -211,7 +254,98 @@
 					}
 				},
 				"source": [
-					"air_pollution_df.show()"
+					"# Flatten the 'list' column\n",
+					"\n",
+					"historical_weather_df = historical_weather_df.withColumn(\"list\", explode(historical_weather_df[\"list\"]))\n",
+					"print(\"Number of rows after flattening the 'list':\", historical_weather_df.count())\n",
+					"historical_weather_df.show(10, truncate=False)"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Instead of having a merged column of all fields,\n",
+					"# extract each field out to have a its own column\n",
+					"\n",
+					"historical_weather_df = historical_weather_df.selectExpr(\n",
+					"    \"calctime\", \n",
+					"    \"city_id\", \n",
+					"    \"cnt\", \n",
+					"    \"cod\", \n",
+					"    \"message\", \n",
+					"    \"list.dt\",\n",
+					"    \"list.main.temp as temp\",\n",
+					"    \"list.main.feels_like as feels_like\",\n",
+					"    \"list.main.humidity as humidity\",\n",
+					"    \"list.main.pressure as pressure\",\n",
+					"    \"list.main.temp_min as temp_min\",\n",
+					"    \"list.main.temp_max as temp_max\",\n",
+					"    \"list.wind.speed as wind_speed\",\n",
+					"    \"list.wind.deg as wind_deg\",\n",
+					"    \"list.wind.gust as wind_gust\",\n",
+					"    \"list.clouds.all as clouds_all\",\n",
+					"    \"list.weather.description as weather_description\",\n",
+					"    \"list.weather.icon as weather_icon\",\n",
+					"    \"list.weather.id as weather_id\",\n",
+					"    \"list.weather.main as weather_main\",\n",
+					"    \"list.rain.1h as rain_1h\",\n",
+					"    \"list.snow.1h as snow_1h\"\n",
+					")\n",
+					"\n",
+					"historical_weather_df.show(10, truncate=False)"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Data Cleaning"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Copy in order to preserve the raw data\n",
+					"cleaned_weather_df = historical_weather_df.select('*')\n",
+					"\n",
+					"# Drop meaningless columns\n",
+					"columns_to_drop = ['calctime', 'city_id', 'cnt', 'cod', 'message']\n",
+					"cleaned_weather_df = cleaned_weather_df.drop(*columns_to_drop)\n",
+					"\n",
+					"# Order by timestamp\n",
+					"cleaned_weather_df = cleaned_weather_df.orderBy(\"dt\")\n",
+					"\n",
+					"cleaned_weather_df.show(10, truncate=False)"
 				],
 				"execution_count": 12
 			},
@@ -229,7 +363,46 @@
 					}
 				},
 				"source": [
+					"# Convert to pandas for further analysis\n",
+					"cleaned_weather_df = cleaned_weather_df.toPandas()\n",
+					"\n",
+					"weather_pdf.head(10)"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
 					""
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"air_pollution_df.printSchema()"
 				],
 				"execution_count": null
 			}
