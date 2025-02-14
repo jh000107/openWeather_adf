@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "1afb9d52-d0a5-40d8-a121-db1977ed8e02"
+				"spark.autotune.trackingId": "76836ef6-c83f-4067-8e38-3b85c2318aa9"
 			}
 		},
 		"metadata": {
@@ -596,6 +596,8 @@
 					"\n",
 					"cleaned_weather_df['temp'] = (cleaned_weather_df['temp'] - 273.15) * 9/5 + 32\n",
 					"cleaned_weather_df['feels_like'] = (cleaned_weather_df['feels_like'] - 273.15) * 9/5 + 32\n",
+					"cleaned_weather_df['temp_max'] = (cleaned_weather_df['temp_max'] - 273.15) * 9/5 + 32\n",
+					"cleaned_weather_df['temp_min'] = (cleaned_weather_df['temp_min'] - 273.15) * 9/5 + 32\n",
 					"cleaned_weather_df.head(10)"
 				],
 				"execution_count": 100
