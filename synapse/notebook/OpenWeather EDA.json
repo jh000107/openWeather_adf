@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "76836ef6-c83f-4067-8e38-3b85c2318aa9"
+				"spark.autotune.trackingId": "30db9b0f-8668-4d21-82ab-eea2caca13d7"
 			}
 		},
 		"metadata": {
@@ -1001,20 +1001,6 @@
 					}
 				},
 				"source": [
-					"c1 = -42.379\n",
-					"c2 = 2.04901523\n",
-					"c3 = 10.14333127\n",
-					"c4 = -0.22475541\n",
-					"c5 = -6.83783e-3\n",
-					"c6 = -5.481717e-2\n",
-					"c7 = 1.22874e-3\n",
-					"c8 = 8.5282e-4\n",
-					"c9 = -1.99e-6\n",
-					"\n",
-					"T = cleaned_weather_df['temp']\n",
-					"R = cleaned_weather_df['humidity']\n",
-					"\n",
-					"\n",
 					"# Create the plot\n",
 					"plt.figure(figsize=(12, 6))\n",
 					"plt.plot(pd.to_datetime(cleaned_weather_df['dt'], unit='s'), -1 * (cleaned_weather_df['temp'] - cleaned_weather_df['feels_like']), label='Temperature', linestyle='-', alpha=0.7)\n",
